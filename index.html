@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD do Sanji</title>
+<style>
+
+    body{
+        margin: 2%;
+    }
+
+</style>
+</head>
+<body>
+    <div class="title"><h1>CRUD DO SANJI</h1></div>
+    
+    <h2>Cadastro</h2>
+    <label for="ipt_cadastro">Cadastrar Estoque de Comidas</label>
+    <input type="text" id="ipt_cadastro">
+
+    <button onclick="cadastrar()">Cadastrar</button>
+    <button onclick="verificar()">Verificar quantidade</button>
+    
+    <div id="resultado_verificar"></div><br><br>
+
+    <h2>Pesquisar</h2>
+    <label for="ipt_pesquisar">Pesquisar:</label>
+    <input type="text" id="ipt_pesquisar">
+    <button onclick="pesquisar()">Pesquisar</button>
+
+    <div id="resultado_pesquisar"></div><br>
+
+    <button onclick="estoque()">Exibir estoque</button>
+
+    <div id="resultado_estoque"></div><br>
+    <h2>Alterar</h2>
+    <label for="ipt_atual">Nome atual da comida que você quer alterar</label>
+    <input type="text" id="ipt_atual"><br>
+    <label for="ipt_alterado">Para qual nome deseja alterar?</label>
+    <input type="text" id="ipt_alterado">
+
+    <button onclick="alterar()">Alterar</button>
+
+    <div id="resultado_alterar"></div>
+
+    <h2>Deletar</h2>
+    <label for="ipt_deletar">Qual comida deseja apagar do estoque?</label>
+    <input type="text" id="ipt_deletar"><br>
+
+    <button onclick="deletar()">Remover Comida</button>
+
+    <div id="resultado_deletar"></div>
+
+</body>
+<script>
+
+    
+    let lista_comida = [];
+
+    let mensagem_verificar = ``;
+
+    function cadastrar(){
+        let comida_cadastrada = (ipt_cadastro.value);
+
+        lista_comida.push(comida_cadastrada);
+        // ipt_cadastro.value = ``; // Para limpar o input
+    }
+
+    function verificar(){
+        resultado_verificar.innerHTML = ``;
+
+        let tamanho = lista_comida.length;
+
+        if (tamanho < 3){
+            mensagem_verificar = `Desse jeito, o Luffy devora até o navio`;
+        } else if (tamanho >= 3 && tamanho <= 7){
+            mensagem_verificar = `O comilão do Luffy não vai deixar sobrar nenhuma comida`;
+        } else if (tamanho >= 8 && tamanho <= 10){
+            mensagem_verificar = `Assim, talvez sobre um pouco para a tripulação`;
+        } else if (tamanho > 10){
+            mensagem_verificar = `Desse jeito vai ter comida para todo mundo e ainda consigo guardar um pouco para a senhorita Nami!`;
+        }
+        resultado_verificar.innerHTML += `${mensagem_verificar}<br>`;
+    }
+
+
+    function pesquisar(){
+        console.log(lista_comida)
+        let pesquisa = (ipt_pesquisar.value)
+
+        resultado_pesquisar.innerHTML = ``;
+
+        let tamanho = lista_comida.length;
+        
+        let contador = 0;
+
+        for (let i = 0; i < tamanho; i++){
+            if (lista_comida[i] == pesquisa){
+                contador++
+            }
+        }
+        if (contador > 0){
+            resultado_pesquisar.innerHTML += `Temos a comida ${pesquisa} e há ${contador} unidade(s) dela`;
+        } else {
+            resultado_pesquisar.innerHTML += `Alguém vai ter que comprar ${pesquisa}, tá fazendo falta...`;
+        }
+    }
+
+    function estoque(){
+        resultado_estoque.innerHTML = ``;
+
+        let tamanho = lista_comida.length;
+
+        let contador = 0;
+
+        let minhaLista1 = [];
+
+        for (let i = 0; i < tamanho; i++){
+            for (let k = 0; k < tamanho; k++ ){
+                if (lista_comida[i] == lista_comida[k]){
+                    contador++
+                }
+            }
+            minhaLista1.push(`${lista_comida[i]} (${contador} unidades)`);
+            contador = 0;
+        }
+
+        let minhaLista2 = [];
+        
+        for (let i = 0; i < tamanho; i++){
+            if (!minhaLista2.includes(minhaLista1[i])){
+                minhaLista2.push(minhaLista1[i])
+                console.log(minhaLista2);
+            }
+        }
+        resultado_estoque.innerHTML += `${minhaLista2.join(', ')}`;
+    }
+
+    function alterar(){
+        resultado_alterar.innerHTML = ``;
+        let atual = (ipt_atual.value);
+        let alterado = (ipt_alterado.value);
+        let tamanho = lista_comida.length;
+        let contador = 0;
+
+        for (let i = 0; i < tamanho; i++){
+            if (atual == lista_comida[i]){
+                lista_comida[i] = alterado;
+                contador++
+            }
+        }
+
+        if (contador > 0){
+            resultado_alterar.innerHTML += `A comida '${atual}' foi alterada para '${alterado}`;
+        } else {
+            resultado_alterar.innerHTML += `A comida '${atual}' não foi encontrada no estoque.`;
+        }
+    }
+
+    function deletar(){
+        resultado_deletar.innerHTML = ``;
+        let deletar = (ipt_deletar.value);
+        let tamanho = lista_comida.length;
+        let contador = 0;
+        let minhaLista1 = []
+
+
+        for (let i = 0; i < tamanho; i++){
+            for (let k = 0; k < tamanho; k++){
+                if(deletar == lista_comida[i]){
+                lista_comida.splice(i, 1);
+                contador++;
+
+                console.log(deletar);
+                console.log(tamanho)
+                console.log(lista_comida);
+                }
+            }
+        }   
+        
+        if (contador > 0){
+            resultado_deletar.innerHTML += `A comida ${deletar} foi removida do estoque.`;
+        } else {
+            resultado_deletar.innerHTML += `A comida ${deletar} não está no estoque.`;
+        }
+    }
+    
+
+</script>
+</html>
