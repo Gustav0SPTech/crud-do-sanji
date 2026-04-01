@@ -122,7 +122,12 @@
                     contador++
                 }
             }
-            minhaLista1.push(`${lista_comida[i]} (${contador} unidades)`);
+            if (contador <= 1){
+                minhaLista1.push(`${lista_comida[i]} (${contador} unidade)`)
+            } else {
+                minhaLista1.push(`${lista_comida[i]} (${contador} unidades)`);
+            }
+            // minhaLista1.push(`${lista_comida[i]} (${contador} unidades)`);
             contador = 0;
         }
 
